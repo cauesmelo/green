@@ -10,7 +10,7 @@ func (app *application) logError(err error) {
 	app.logger.Println(err)
 }
 
-func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, status int, errors interface{}) {
+func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, status int, errors any) {
 	data := data.Err{Error: errors}
 	err := app.writeJSON(w, status, data, nil)
 	if err != nil {

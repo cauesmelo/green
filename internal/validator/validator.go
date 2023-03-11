@@ -30,14 +30,14 @@ func (v *Validator) Check(ok bool, key, message string) {
 	}
 }
 
-func In(value string, list ...string) bool {
+func Out(value string, list ...string) bool {
 	for i := range list {
 		if value == list[i] {
-			return true
+			return false
 		}
 	}
 
-	return false
+	return true
 }
 
 func Matches(value string, rx *regexp.Regexp) bool {
