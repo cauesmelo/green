@@ -6,21 +6,24 @@ import (
 	"github.com/cauesmelo/green/internal/data"
 )
 
-func (app *application) logError(err error) {
-	app.logger.Println(err)
+func (app *application) logError(r *http.Request, err error) {
+	app.logger.PrintError(err, map[string]string{
+		"request_method": r.Method,
+		"request_url":    r.URL.String(),
+	})
 }
 
 func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, status int, errors any) {
 	data := data.Err{Error: errors}
 	err := app.writeJSON(w, status, data, nil)
 	if err != nil {
-		app.logError(err)
+		app.logError(r, err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
 func (app *application) serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
-	app.logError(err)
+	app.logError(r, err)
 
 	app.errorResponse(w, r, http.StatusInternalServerError, "Internal server error")
 }
@@ -44,4 +47,8 @@ func (app *application) failedValidationResponse(w http.ResponseWriter, r *http.
 
 func (app *application) editConflictResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusConflict, "Unable to update due to conflict")
+}
+
+func (app *application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusTooManyRequests, "rate limit exceeded")
 }
