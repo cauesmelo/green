@@ -52,3 +52,24 @@ func (app *application) editConflictResponse(w http.ResponseWriter, r *http.Requ
 func (app *application) rateLimitExceededResponse(w http.ResponseWriter, r *http.Request) {
 	app.errorResponse(w, r, http.StatusTooManyRequests, "rate limit exceeded")
 }
+
+func (app *application) invalidCredentialsResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusUnauthorized, "invalid credentials")
+}
+
+func (app *application) invalidAuthenticationTokenResponse(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("WWW-Authenticate", "Bearer")
+	app.errorResponse(w, r, http.StatusUnauthorized, "invalid or missing authentication token")
+}
+
+func (app *application) authenticationRequiredResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusUnauthorized, "you must be authenticated to access this resource")
+}
+
+func (app *application) inactiveAccountResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusForbidden, "your user account must be activated to access this resource")
+}
+
+func (app *application) notPermittedResponse(w http.ResponseWriter, r *http.Request) {
+	app.errorResponse(w, r, http.StatusForbidden, "your user account doesn't have the necessary permissions to access this resource")
+}
