@@ -59,18 +59,18 @@ func main() {
 
 	flag.IntVar(&cfg.port, "port", 4000, "API server port")
 	flag.StringVar(&cfg.env, "env", "dev", "Environment (dev|stag|prod)")
-	flag.StringVar(&cfg.db.cs, "cs", os.Getenv("GREEN_DB_CS"), "PostgreSQL connection string")
+	flag.StringVar(&cfg.db.cs, "cs", "", "PostgreSQL connection string")
 	flag.IntVar(&cfg.db.maxOpenConns, "db-max-open-conns", 25, "PostgreSQL max open connections")
 	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "PostgreSQL max idle connections")
 	flag.StringVar(&cfg.db.maxIdleTime, "db-max-idle-time", "15m", "PostgreSQL max connection idle time")
 	flag.Float64Var(&cfg.limiter.rps, "limiter-rps", 2, "Rate limiter max requests/second")
 	flag.IntVar(&cfg.limiter.burst, "limiter-burst", 4, "Rate limiter max burst")
 	flag.BoolVar(&cfg.limiter.enabled, "limiter-enabled", true, "Enable rate limiter")
-	flag.StringVar(&cfg.smtp.host, "smtp-host", "sandbox.smtp.mailtrap.io", "SMTP host")
+	flag.StringVar(&cfg.smtp.host, "smtp-host", "", "SMTP host")
 	flag.IntVar(&cfg.smtp.port, "smtp-port", 2525, "SMTP port")
 	flag.StringVar(&cfg.smtp.username, "smtp-username", "", "SMTP username")
 	flag.StringVar(&cfg.smtp.password, "smtp-password", "", "SMTP password")
-	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "Green <no-reply@green.cauesmelo.net>", "SMTP sender")
+	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "", "SMTP sender")
 	flag.Func("cors-trusted-origins", "Trusted CORS origins (space separated)", func(val string) error {
 		cfg.cors.trustedOrigins = strings.Fields(val)
 		return nil

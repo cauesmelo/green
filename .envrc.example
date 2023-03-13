@@ -1,0 +1,5 @@
+export GREEN_DB_CS=
+export SMTP_USER=
+export SMTP_PW=
+export SMTP_SENDER=
+export SMTP_HOST=
