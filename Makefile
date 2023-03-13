@@ -1,5 +1,10 @@
 include .envrc
 
+
+# ==================================================================================== #
+# HELPERS
+# ==================================================================================== #
+
 ## help: print this help message
 .PHONY: help
 help:
@@ -20,6 +25,11 @@ welcome:
 	@printf "\033[33m ╚██████╗██║  ██║███████╗███████║███████║\n"
 	@printf "\033[33m  ╚═════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝\n"
 	@printf "\033[0m\n"
+
+
+# ==================================================================================== #
+# DEVELOPMENT
+# ==================================================================================== #
 
 ## run/api: run the cmd/api application
 .PHONY: run/api
@@ -42,3 +52,22 @@ db/migrations/new:
 db/migrations/up: confirm
 	@echo 'Running up migrations...'
 	@migrate -path ./migrations -database ${GREEN_DB_CS} up
+
+
+# ==================================================================================== #
+# QUALITY CONTROL
+# ==================================================================================== #
+
+## audit: tidy dependencies and format, vet and test all code
+.PHONY: audit
+audit:
+	@echo 'Tidying and verifying module dependencies...'
+	go mod tidy
+	go mod verify
+	@echo 'Formatting code...'
+	go fmt ./...
+	@echo 'Vetting code...'
+	go vet ./...
+	staticcheck ./...
+	@echo 'Running tests...'
+	go test -race -vet=off ./...
